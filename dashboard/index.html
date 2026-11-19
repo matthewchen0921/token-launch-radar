@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — pre-token protocols ranked by fitted implied value</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#board">Skip to the board</a>
+<header class="top">
+  <div class="brand"><span class="pulse" aria-hidden="true"></span><div><h1>TOKEN RADAR</h1><p class="sub">Which pre-token protocol is worth farming next — and what to do about it.</p></div></div>
+  <p class="asof" id="asof"></p>
+</header>
+<section class="kpis" id="kpis" aria-label="Coverage"></section>
+<main id="board" tabindex="-1" aria-busy="true">
+  <section class="panel model" id="model" aria-label="How the value is fitted"></section>
+  <section class="panel controls" aria-label="Board controls">
+    <div class="tabs" role="tablist" aria-label="Views">
+      <button type="button" id="tab-board" role="tab" aria-selected="true">Pre-token board</button>
+      <button type="button" id="tab-live" role="tab" aria-selected="false">Live tokens (anchors)</button>
+    </div>
+    <div class="filters">
+      <label>Search <input id="q" type="search" placeholder="name or slug" autocomplete="off"></label>
+      <label>Category <select id="f-category"></select></label>
+      <label>Chain <select id="f-chain"></select></label>
+      <label>Verdict <select id="f-verdict"><option value="all">All verdicts</option><option value="FARM">FARM</option><option value="THIN">THIN</option><option value="SKIP">SKIP</option></select></label>
+      <label>Momentum <select id="f-momentum"><option value="all">Any 7d</option><option value="up">Growing (7d &ge; 0)</option><option value="down">Shrinking (7d &lt; 0)</option></select></label>
+      <label>Sort <select id="f-sort"><option value="implied">Implied value</option><option value="tvl">TVL</option><option value="growth">7d change</option><option value="age">Age</option><option value="name">Name</option></select></label>
+    </div>
+    <p class="count" id="count"></p>
+  </section>
+  <section class="panel compare" id="compare" hidden aria-label="Compare"></section>
+  <section class="panel detail" id="detail" hidden aria-label="Protocol detail"></section>
+  <section class="panel tablewrap" aria-label="Ranked board">
+    <table id="table">
+      <thead><tr><th data-sort="rank">#</th><th data-sort="name">Protocol</th><th data-sort="tvl">TVL</th><th data-sort="growth">7d</th><th data-sort="multiple">&times; fitted</th><th data-sort="implied">Implied value</th><th data-sort="verdict">Verdict</th><th>Compare</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="empty" id="empty" hidden>No protocol matches this filter.</p>
+  </section>
+  <section class="panel live" id="live" hidden aria-label="Live token anchors"></section>
+</main>
+<footer class="foot">
+  <p><strong>Method.</strong> Implied value = TVL &times; fitted multiple &times; growth &times; maturity. The multiple is
+  fitted from the snapshot itself: the median market-cap/TVL ratio of the tokenised protocols in the same
+  category (shrunk toward the global median, k = 5), winsorised to [0.005, 2.0]. Growth is the 7-day TVL change
+  clamped to [&minus;60, +120]%, weighted 0.5; maturity rises with days listed, 0.6 to 1.0 over three years.
+  The fit is tested blind on a 20% holdout of the comps (see the model panel). No protocol name is ever
+  special-cased; every number derives from the snapshot's own fields.</p>
+  <p><strong>Reading it.</strong> “Records no token” means the snapshot's DefiLlama record carries no token — never
+  that the protocol has none. Implied value is this entry's own claim about what a launch would be worth if
+  the protocol's record stayed as it is; it does not predict whether or when a token is issued. Farm steps
+  are generic guidance, not financial advice; airdrops are never guaranteed.</p>
+  <p id="source"></p>
+</footer>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
